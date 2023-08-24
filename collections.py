@@ -44,3 +44,37 @@ def countletter(file):
         c.update(letters)
     [print(f'{key}: {value}') for key, value in sorted(c.items())]
 
+'''Самое частое слово в введенной строке независимо от регистра'''
+d = __import__('collections').Counter(input().lower().split()).most_common()
+print(max(k for k, v in d if v == d[0][1]))
+
+'''Сколько раз пользователь менял имя (таблица csv, три столбца - имя, почта и дата изменения)'''
+from collections import Counter
+import csv
+
+with open('name_log.csv','r',encoding='utf-8') as file:
+    lines = list(csv.reader(file))
+    changes = Counter(l[1] for l in lines[1:])
+    for el in sorted(changes.items()):
+        print(f'{el[0]}: {el[1]}')
+
+'''Можно ли из символов составить слово'''
+from collections import Counter
+
+def scrabble(symbols, word):
+    return Counter(word.lower()) <= Counter(symbols.lower())
+
+'''Выдает множество ключей словарей'''
+from collections import ChainMap
+
+def get_all_values(chainmap, key):
+    return {d[key] for d in chainmap.maps if key in d}
+
+'''Поиск ключа в словарях (слева направо или наоборот)'''
+from collections import ChainMap
+
+def get_value(chainmap, key, from_left=True):
+    for item in chainmap.maps if from_left else reversed(chainmap.maps):
+        if key in item:
+            return item[key]
+    return None
