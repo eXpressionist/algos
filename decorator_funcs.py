@@ -65,3 +65,19 @@ def ignore_exception(*exceptions):
                 print(f"Исключение {type(e).__name__} обработано")
         return wrapper
     return decorator
+
+'''Визуализирует выполнение декорируемой функции, в том числе и рекурсивной. Декоратор должен отображать все рекурсивные вызовы и возвращаемые значения, полученные при этих вызовах, причем рекурсивные вызовы, выполняемые в глубину, должны отделяться друг от друга четырьмя пробелами.'''
+import functools
+def recviz(func):
+    @functools.wraps(func)
+    def wrapper(*args,**kwargs):
+        wrapper.count += 1
+        print(f'{wrapper.count*"    "}-> {func.__name__}(',end='')
+        print(', '.join(list(map(repr, args)) +
+              [f'{k}={repr(v)}' for k, v in kwargs.items()]),end=')\n')
+        f1 = func(*args,**kwargs)
+        print(f'{wrapper.count*"    "}<- {repr(f1)}')
+        wrapper.count -= 1
+        return f1
+    wrapper.count = -1
+    return wrapper
